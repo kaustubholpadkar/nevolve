@@ -38,7 +38,8 @@ activation_map = {
 	"sigmoid": sigmoid,
 	"tanh": tanh,
 	"softmax": softmax,
-	"linear": lambda x: x
+	"linear": lambda x: x,
+	"relu": lambda x: np.maximum(x, 0)
 }
 
 
