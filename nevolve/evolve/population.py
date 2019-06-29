@@ -12,6 +12,7 @@ class Population:
 		self.size = size
 		self.population = []
 		self.best_of_population = None
+		self.best_score = 0
 		self.best_of_all_generations = None
 		self.show_best_of_population = True
 		self.fitness_sum = 0
@@ -86,6 +87,7 @@ class Population:
 			if obj.dead:
 				obj.close()
 
+		self.best_score = best_obj.fitness
 		self.best_of_population = best_obj.clone()
 
 	def select_parent(self):
@@ -138,7 +140,7 @@ class Population:
 			agent.think()
 			agent.act()
 
-	def evolve(self, show_best=False, checkpoint=False, checkpoint_dir=".", checkpoint_prefix=""):
+	def evolve(self, show_best=False, checkpoint=False, checkpoint_dir=".", checkpoint_prefix="", verbose=True):
 		best_thread = None
 
 		for i in range(self.max_generation):
@@ -164,6 +166,9 @@ class Population:
 
 			self.calculate_fitness()
 			self.natural_selection()
+
+			if verbose:
+				print("Generation: {} | Best Fitness: {}".format(i+1, self.best_score))
 
 		self.close()
 
