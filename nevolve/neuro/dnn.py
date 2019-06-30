@@ -44,3 +44,12 @@ class DNN:
 
 	def set_weights(self, weights, biases):
 		self.weights, self.biases = weights, biases
+
+	def serialize(self):
+		return self.weights, self.biases, self.activations
+
+	def deserialize(self, data):
+		weights, biases, activations = data
+		self.weights = [weight for weight in weights]
+		self.biases = [bias for bias in biases]
+		self.activations = [activation for activation in activations]
