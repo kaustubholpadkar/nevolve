@@ -182,7 +182,7 @@ class Population:
 			self.best_of_population.close()
 
 	def save_population(self, path):
-		data = [obj.brain.get_brain() for obj in self.population]
+		data = [obj.get_brain() for obj in self.population]
 		with open(path, 'wb') as outfile:
 			pickle.dump(data, outfile, pickle.HIGHEST_PROTOCOL)
 
@@ -194,4 +194,11 @@ class Population:
 			self.population[i].set_brain(data[i])
 
 	def save_best_(self, path):
-		self.best_of_population.save(path)
+		with open(path, 'wb') as outfile:
+			pickle.dump(self.best_of_population.get_brain(), outfile, pickle.HIGHEST_PROTOCOL)
+
+	def load_best_(self, path):
+		self.best_of_population = self.cls()
+		with open(path, 'rb') as infile:
+			data = pickle.load(infile)
+			self.best_of_population.set_brain(data)
