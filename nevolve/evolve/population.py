@@ -6,8 +6,20 @@ from concurrent.futures import ThreadPoolExecutor
 
 
 class Population:
+	"""
+	Class for Neuro-Evolution
+	"""
 
 	def __init__(self, cls, size=500, mutation_rate=0.05, max_workers=8, max_generation=100):
+		"""
+		Constructor of Population
+		:param cls:
+		:param size:
+		:param mutation_rate:
+		:param max_workers:
+		:param max_generation:
+		"""
+
 		self.cls = cls
 		self.size = size
 		self.population = []
@@ -36,49 +48,10 @@ class Population:
 		for future in futures:
 			self.population.append(future.result())
 
-	def done(self):
-		for obj in self.population:
-			if not obj.dead:
-				return False
-		return True
-
-	def update(self):
-		if self.show_best_of_population and self.best_of_population and not self.best_of_population.dead:
-			self.best_of_population.think()
-			self.best_of_population.act()
-
-		for obj in self.population:
-			if not obj.dead:
-				obj.think()
-				obj.act()
-
-	def show(self):
-		if not self.show_best_of_population:
-			best_index = self.last_best_index
-			last_best_obj = self.population[self.last_best_index]
-			best_obj = self.population[self.last_best_index]
-			for i in range(len(self.population)):
-				obj = self.population[i]
-				if obj.fitness > best_obj.fitness:
-					best_obj = obj
-					best_index = i
-				if obj.dead:
-					obj.close()
-				else:
-					if not self.show_best:
-						obj.show()
-
-			if self.show_best and not best_obj.dead:
-				if best_index != self.last_best_index:
-					last_best_obj.close()
-					self.last_best_index = best_index
-				best_obj.show()
-
-		if self.show_best_of_population and self.best_of_population and not self.best_of_population.dead:
-			self.best_of_population.show()
-
 	def set_best_of_population(self):
-
+		"""
+		Set the Best of Population
+		"""
 		best_obj = self.population[self.last_best_index]
 		for i in range(len(self.population)):
 			obj = self.population[i]
@@ -91,6 +64,10 @@ class Population:
 		self.best_of_population = best_obj.clone()
 
 	def select_parent(self):
+		"""
+		Function to select parent (Selection Algorithm based on Genetic Algorithm)
+		:return: instance of Environment
+		"""
 		rand = np.random.random() * self.fitness_sum
 		summation = 0
 
@@ -102,19 +79,31 @@ class Population:
 		return self.population[0].clone()
 
 	def mutate(self):
+		"""
+		Mutate the Population
+		"""
 		for obj in self.population:
 			obj.mutate(self.mutation_rate)
 
 	def calculate_fitness(self):
+		"""
+		Calculate Fitness for Population
+		"""
 		for obj in self.population:
 			obj.calculate_fitness()
 
 	def calculate_fitness_sum(self):
+		"""
+		Calculate Fitness Sum
+		"""
 		self.fitness_sum = 0
 		for obj in self.population:
 			self.fitness_sum += obj.fitness
 
 	def natural_selection(self):
+		"""
+		Natural Selection Algorithm to create Next Generation Population
+		"""
 		new_population = []
 
 		self.set_best_of_population()
@@ -129,11 +118,17 @@ class Population:
 		self.generation += 1
 
 	def close(self):
+		"""
+		Function to clean up the Population
+		"""
 		for obj in self.population:
 			obj.close()
 
 	def explore(self, index):
-
+		"""
+		Explore the Environment
+		:param index: index of agent to explore
+		"""
 		agent = self.population[index]
 
 		while not agent.dead:
@@ -141,6 +136,14 @@ class Population:
 			agent.act()
 
 	def evolve(self, show_best=False, checkpoint=False, checkpoint_dir=".", checkpoint_prefix="", verbose=True):
+		"""
+		Function to start Neuro-Evolution
+		:param show_best: show best population
+		:param checkpoint: checkpoint flag
+		:param checkpoint_dir: checkpoint directory
+		:param checkpoint_prefix: prefix to checkpoint files
+		:param verbose: print intermediate messages
+		"""
 		best_thread = None
 
 		for i in range(self.max_generation):
@@ -173,6 +176,9 @@ class Population:
 		self.close()
 
 	def display_best(self):
+		"""
+		Function to Display Best Agent
+		"""
 		while self.best_of_population and not self.best_of_population.dead:
 			self.best_of_population.think()
 			self.best_of_population.act()
@@ -182,11 +188,19 @@ class Population:
 			self.best_of_population.close()
 
 	def save_population(self, path):
+		"""
+		Save the Population to File
+		:param path: path where to store file
+		"""
 		data = [obj.get_brain() for obj in self.population]
 		with open(path, 'wb') as outfile:
 			pickle.dump(data, outfile, pickle.HIGHEST_PROTOCOL)
 
 	def load_population(self, path):
+		"""
+		Load the Population from File
+		:param path: path from where to load population
+		"""
 		with open(path, 'rb') as infile:
 			data = pickle.load(infile)
 
@@ -194,10 +208,18 @@ class Population:
 			self.population[i].set_brain(data[i])
 
 	def save_best_(self, path):
+		"""
+		Save the Best Population to File
+		:param path: path where to store file
+		"""
 		with open(path, 'wb') as outfile:
 			pickle.dump(self.best_of_population.get_brain(), outfile, pickle.HIGHEST_PROTOCOL)
 
 	def load_best_(self, path):
+		"""
+		Load the Best Population from File
+		:param path: path from where to load agent
+		"""
 		self.best_of_population = self.cls()
 		with open(path, 'rb') as infile:
 			data = pickle.load(infile)

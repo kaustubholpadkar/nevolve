@@ -15,7 +15,11 @@ def sigmoid(x, derivative=False):
 
 
 def softmax(x):
-	"""Compute softmax values for each sets of scores in x."""
+	"""
+	Softmax activation function
+	:param x: input
+	:return: softmax for given input
+	"""
 	x = x[0]
 	e_x = np.exp(x - np.max(x))
 	return e_x / e_x.sum()
@@ -34,6 +38,7 @@ def tanh(x, derivative=False):
 	return sig
 
 
+# dictionary mapping string to activation function
 activation_map = {
 	"sigmoid": sigmoid,
 	"tanh": tanh,
@@ -43,5 +48,11 @@ activation_map = {
 }
 
 
-def activate(Z, activation):
-	return activation_map[activation](Z)
+def activate(z, activation):
+	"""
+	Function to apply activation function on numpy array z
+	:param z: numpy array
+	:param activation: activation function (str)
+	:return: numpy array
+	"""
+	return activation_map[activation](z)

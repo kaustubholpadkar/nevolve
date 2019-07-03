@@ -7,8 +7,14 @@ gym.logger.set_level(40)
 
 
 class BipedalWalkerV2(GymEnvironment):
+	"""
+	Wrapper for BipedalWalker-v2 environment of OpenAI Gym
+	"""
 
 	def __init__(self):
+		"""
+		Constructor of BipedalWalkerV2
+		"""
 		super().__init__()
 
 		self.env = gym.make("BipedalWalker-v2")
@@ -18,6 +24,9 @@ class BipedalWalkerV2(GymEnvironment):
 		self.brain = self.create_brain()
 
 	def think(self):
+		"""
+		Function for inference based on current observation
+		"""
 		inputs = self.observation
 		inputs[0] /= 2 * 3.1415
 
@@ -32,6 +41,9 @@ class BipedalWalkerV2(GymEnvironment):
 		self.action = outputs
 
 	def act(self):
+		"""
+		Function to apply the action and get observation and rewards
+		"""
 		self.observation, reward, self.dead, info = self.env.step(self.action)
 		if reward == -100:
 			self.dead = True
@@ -46,12 +58,19 @@ class BipedalWalkerV2(GymEnvironment):
 			self.dead = True
 
 	def calculate_fitness(self):
+		"""
+		Function to set fitness while applying natural selection
+		"""
 		if self.score < 0:
 			self.fitness = 0.0
 		else:
 			self.fitness = self.score * self.score
 
 	def get_config(self):
+		"""
+		Get Neural Network Configuration
+		:return: list
+		"""
 		input_size = self.env.observation_space.shape[0]
 		hidden_size = 16
 		output_size = self.env.action_space.shape[0]

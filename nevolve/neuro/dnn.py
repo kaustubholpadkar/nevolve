@@ -10,7 +10,7 @@ class DNN:
 	def __init__(self, config):
 		"""
 		Constructor of DNN
-		:param config: Neural Network Configuration
+		:param config: dict - Neural Network Configuration
 		"""
 
 		self.weights = []
@@ -40,15 +40,32 @@ class DNN:
 		return A
 
 	def get_weights(self):
+		"""
+		Get the Weights
+		:return: tuple - (weights, biases)
+		"""
 		return self.weights, self.biases
 
 	def set_weights(self, weights, biases):
+		"""
+		Set the Weights
+		:param weights: numpy array
+		:param biases: numpy array
+		"""
 		self.weights, self.biases = weights, biases
 
 	def serialize(self):
+		"""
+		Serialize the Neural Network
+		:return: tuple
+		"""
 		return self.weights, self.biases, self.activations
 
 	def deserialize(self, data):
+		"""
+		Deserialize the Neural Network
+		:param data: tuple - (weights, biases, activations)
+		"""
 		weights, biases, activations = data
 		self.weights = [weight for weight in weights]
 		self.biases = [bias for bias in biases]
