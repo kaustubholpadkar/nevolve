@@ -1,3 +1,8 @@
+"""
+Module for Neuro-Evolution implementation.
+"""
+
+
 import os
 import pickle
 import numpy as np
@@ -8,33 +13,38 @@ from concurrent.futures import ThreadPoolExecutor
 class Population:
 	"""
 	Class for Neuro-Evolution
+
+	Args:
+		cls: class for the Environment
+		size: Population size
+		mutation_rate: Mutation Rate
+		max_workers: Maximum Workers
+
+	Attributes:
+		cls: class for the Environment
+		size: Population size
+		population: list
+		best_of_population: instance of the best agent in the population
+		best_score: score of the best agent in the population
+		fitness_sum: sum of the fitness of all agents in the population
+		mutation_rate: Mutation Rate
+		generation: current generation number
+		max_workers: Maximum Workers
+		pool: instance of ThreadPoolExecutor
 	"""
 
-	def __init__(self, cls, size=500, mutation_rate=0.05, max_workers=8, max_generation=100):
-		"""
-		Constructor of Population
-		:param cls:
-		:param size:
-		:param mutation_rate:
-		:param max_workers:
-		:param max_generation:
-		"""
+	def __init__(self, cls, size=500, mutation_rate=0.05, max_workers=8):
 
 		self.cls = cls
 		self.size = size
 		self.population = []
 		self.best_of_population = None
 		self.best_score = 0
-		self.best_of_all_generations = None
-		self.show_best_of_population = True
 		self.fitness_sum = 0
 
 		self.mutation_rate = mutation_rate
-		self.show_best = False
-		self.last_best_index = 0
 
 		self.generation = 0
-		self.max_generation = max_generation
 
 		self.max_workers = max_workers
 		self.pool = ThreadPoolExecutor(max_workers=self.max_workers)
@@ -52,7 +62,7 @@ class Population:
 		"""
 		Set the Best of Population
 		"""
-		best_obj = self.population[self.last_best_index]
+		best_obj = self.population[0]
 		for i in range(len(self.population)):
 			obj = self.population[i]
 			if obj.fitness > best_obj.fitness:
@@ -66,7 +76,9 @@ class Population:
 	def select_parent(self):
 		"""
 		Function to select parent (Selection Algorithm based on Genetic Algorithm)
-		:return: instance of Environment
+
+		Returns:
+			instance of Environment
 		"""
 		rand = np.random.random() * self.fitness_sum
 		summation = 0
@@ -127,7 +139,9 @@ class Population:
 	def explore(self, index):
 		"""
 		Explore the Environment
-		:param index: index of agent to explore
+
+		Args:
+			index: index of agent to explore
 		"""
 		agent = self.population[index]
 
@@ -135,18 +149,21 @@ class Population:
 			agent.think()
 			agent.act()
 
-	def evolve(self, show_best=False, checkpoint=False, checkpoint_dir=".", checkpoint_prefix="", verbose=True):
+	def evolve(self, max_generation=100, show_best=False, checkpoint=False, checkpoint_dir=".", checkpoint_prefix="", verbose=True):
 		"""
 		Function to start Neuro-Evolution
-		:param show_best: show best population
-		:param checkpoint: checkpoint flag
-		:param checkpoint_dir: checkpoint directory
-		:param checkpoint_prefix: prefix to checkpoint files
-		:param verbose: print intermediate messages
+
+		Args:
+			show_best: show best population
+			checkpoint: checkpoint flag
+			checkpoint_dir: checkpoint directory
+			checkpoint_prefix: prefix to checkpoint files
+			verbose: print intermediate messages
+			max_generation: Maximum number of Generations
 		"""
 		best_thread = None
 
-		for i in range(self.max_generation):
+		for i in range(max_generation):
 			if show_best:
 				best_thread = threading.Thread(target=self.display_best)
 				best_thread.start()
@@ -190,7 +207,9 @@ class Population:
 	def save_population(self, path):
 		"""
 		Save the Population to File
-		:param path: path where to store file
+
+		Args:
+			path: path where to store file
 		"""
 		data = [obj.get_brain() for obj in self.population]
 		with open(path, 'wb') as outfile:
@@ -199,7 +218,9 @@ class Population:
 	def load_population(self, path):
 		"""
 		Load the Population from File
-		:param path: path from where to load population
+
+		Args:
+			path: path from where to load population
 		"""
 		with open(path, 'rb') as infile:
 			data = pickle.load(infile)
@@ -210,7 +231,9 @@ class Population:
 	def save_best_(self, path):
 		"""
 		Save the Best Population to File
-		:param path: path where to store file
+
+		Args:
+			path: path where to store file
 		"""
 		with open(path, 'wb') as outfile:
 			pickle.dump(self.best_of_population.get_brain(), outfile, pickle.HIGHEST_PROTOCOL)
@@ -218,7 +241,9 @@ class Population:
 	def load_best_(self, path):
 		"""
 		Load the Best Population from File
-		:param path: path from where to load agent
+
+		Args:
+			path: path from where to load agent
 		"""
 		self.best_of_population = self.cls()
 		with open(path, 'rb') as infile:

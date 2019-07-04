@@ -1,3 +1,8 @@
+"""
+Module for Neural Network implementation with Evolutionary Functionality like Mutation and Crossover.
+"""
+
+
 import copy
 import numpy as np
 from nevolve.neuro.dnn import DNN
@@ -6,27 +11,33 @@ from nevolve.neuro.dnn import DNN
 class NeuralNetwork:
 	"""
 	Class for Neural Network
+
+	Args:
+		model: instance of DNN
+
+	Attributes:
+		model: instance of DNN
 	"""
 
 	def __init__(self, model):
-		"""
-		Constructor of NeuralNetwork
-		:param model: instance of DNN
-		"""
 		assert isinstance(model, DNN)
 		self.model = model
 
 	def copy(self):
 		"""
 		Create a copy of NeuralNetwork
-		:return: instance of NeuralNetwork
+
+		Returns:
+			instance of NeuralNetwork
 		"""
 		return NeuralNetwork(copy.deepcopy(self.model))
 
 	def mutate(self, rate):
 		"""
 		Mutate the Neural Network
-		:param rate: mutation rate
+
+		Args:
+			rate: mutation rate
 		"""
 		weights, biases = self.model.get_weights()
 
@@ -45,16 +56,22 @@ class NeuralNetwork:
 	def predict(self, inputs):
 		"""
 		Predict output for given input
-		:param inputs: numpy array
-		:return: numpy array
+
+		Args:
+			inputs: numpy array
+
+		Returns:
+			numpy array
 		"""
 		return self.model.predict(inputs)
 
 	def _mutate_np_array(self, arr, rate):
 		"""
 		Mutate the given numpy array
-		:param arr: numpy array
-		:param rate: mutation rate
+
+		Args:
+			arr: numpy array
+			rate: mutation rate
 		"""
 		if len(arr.shape) == 1:
 			for x in range(arr.shape[0]):

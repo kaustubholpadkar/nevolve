@@ -1,3 +1,8 @@
+"""
+Bipedal Walker Environment of OpenAI Gym.
+"""
+
+
 import gym
 import numpy as np
 from nevolve.envs import GymEnvironment
@@ -8,7 +13,18 @@ gym.logger.set_level(40)
 
 class BipedalWalkerV2(GymEnvironment):
 	"""
-	Wrapper for BipedalWalker-v2 environment of OpenAI Gym
+	Wrapper for BipedalWalker-v2 environment of OpenAI Gym.
+
+	Attributes:
+		brain: NeuralNetwork instance
+		env: Environment instance
+		configuration: Neural Network Configuration
+		cls: Environment Class Reference
+		dead: bool - if agent is dead
+		action: Action to be taken at next step
+		fitness: Fitness of agent
+		score: Score of agent
+		observation: Observation of Environment
 	"""
 
 	def __init__(self):
@@ -69,7 +85,20 @@ class BipedalWalkerV2(GymEnvironment):
 	def get_config(self):
 		"""
 		Get Neural Network Configuration
-		:return: list
+
+		Returns:
+			list - Neural Network Configuration
+
+			Examples:
+
+				To create Neural Network with 1 hidden layer with input dimension 2, hidden nodes 5 and output dimension 1,
+				use following configuration.
+
+				[
+					{"input_dim": 2, "output_dim": 5, "activation": "sigmoid"},
+					{"input_dim": 5, "output_dim": 1, "activation": "softmax"}
+				]
+
 		"""
 		input_size = self.env.observation_space.shape[0]
 		hidden_size = 16
