@@ -1,3 +1,8 @@
+"""
+Module for Deep Neural Network implementation.
+"""
+
+
 import numpy as np
 from nevolve.neuro import activations
 
@@ -5,13 +10,18 @@ from nevolve.neuro import activations
 class DNN:
 	"""
 	Class for Deep Neural Network
+
+
+	Args:
+		config: dict - Neural Network Configuration
+
+	Attributes:
+		weights: list of weights for all each layer
+		biases: list of biases for all each layer
+		activations: list of activation functions for all each layer
 	"""
 
 	def __init__(self, config):
-		"""
-		Constructor of DNN
-		:param config: Neural Network Configuration
-		"""
 
 		self.weights = []
 		self.biases = []
@@ -28,9 +38,13 @@ class DNN:
 
 	def predict(self, x):
 		"""
-		Predict the output for given input
-		:param x: input data
-		:return: prediction
+		Predict the output for given input - Forward Pass of Neural Network
+
+		Args:
+			x: numpy array - input data
+
+		Returns:
+			prediction - numpy array
 		"""
 
 		A = x
@@ -40,15 +54,40 @@ class DNN:
 		return A
 
 	def get_weights(self):
+		"""
+		Get the Weights
+
+		Returns:
+			tuple - (weights, biases)
+		"""
 		return self.weights, self.biases
 
 	def set_weights(self, weights, biases):
+		"""
+		Set the Weights
+
+		Args:
+			weights: numpy array
+			biases: numpy array
+		"""
 		self.weights, self.biases = weights, biases
 
 	def serialize(self):
+		"""
+		Serialize the Neural Network
+
+		Returns:
+			tuple
+		"""
 		return self.weights, self.biases, self.activations
 
 	def deserialize(self, data):
+		"""
+		Deserialize the Neural Network
+
+		Args:
+			data: tuple - (weights, biases, activations)
+		"""
 		weights, biases, activations = data
 		self.weights = [weight for weight in weights]
 		self.biases = [bias for bias in biases]
