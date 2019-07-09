@@ -115,6 +115,12 @@ class Environment(metaclass=ABCMeta):
 		"""
 		raise NotImplementedError()
 
+	def reset(self):
+		"""
+		Reset the Environment
+		"""
+		raise NotImplementedError()
+
 	def calculate_fitness(self):
 		"""
 		Calculate Fitness!
@@ -164,3 +170,10 @@ class GymEnvironment(Environment, metaclass=ABCMeta):
 		Close the Environment
 		"""
 		self.env.close()
+
+	def reset(self):
+		"""
+		Reset the Environment
+		"""
+		self.observation = self.env.reset()
+		self.dead = False
