@@ -1,6 +1,9 @@
 # Nevolve - Neuro-Evolution for Humans
-Neuro-Evolution Library for Reinforcement Learning.
 
+![Nevolve logo](nevolve-boring.png)
+
+## You have just found Nevolve.
+Neuro-Evolution Library for Reinforcement Learning.
 
 ## Getting started: 15 seconds to Nevolve
 
