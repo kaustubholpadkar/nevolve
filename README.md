@@ -3,7 +3,13 @@
 ![Nevolve logo](nevolve-boring.png)
 
 ## You have just found Nevolve.
-Neuro-Evolution Library for Reinforcement Learning.
+Nevolve is a Neuro-Evolution Library for __Reinforcement Learning__, written in Python, developed aiming at enabling rapid experimentation.
+
+It implements *conventional neuro-evolution algorithm*, which evolves the strength of the connection weights for a fixed network topology. It initializes the Artificial Neural Network with random weights and evolves the weights using Neuro-Evolution.
+
+Read the documentation at [Nevolve.ml](https://nevolve.ml).
+
+Nevolve is compatible with: __Python 3.5 or greater__
 
 ## Getting started: 15 seconds to Nevolve
 
@@ -103,6 +109,15 @@ git clone https://github.com/kaustubholpadkar/nevolve.git
 cd nevolve
 sudo python setup.py install
 ```
+
+
+------------------
+
+## Future enhancement
+
+- Adding support for NEAT algorithm and its variations which can evolve the weights as well as the topology of the Neural Network.
+- Introducing some computational optimizations in Neural Network library and Evolutionary Algorithm.
+- Introducing few new wrappers for OpenAI Gym and other environments.
 
 ------------------
 
