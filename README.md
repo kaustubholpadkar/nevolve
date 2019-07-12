@@ -115,7 +115,7 @@ sudo python setup.py install
 
 ## Future enhancement
 
-- Adding support for NEAT algorithm and its variations which can evolve the weights as well as the topology of the Neural Network.
+- Adding support for NEAT algorithm and its variations which can evolve the weights and the topology of the Neural Network.
 - Introducing some computational optimizations in Neural Network library and Evolutionary Algorithm.
 - Introducing few new wrappers for OpenAI Gym and other environments.
 
