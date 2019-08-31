@@ -72,9 +72,9 @@ model.save_best_(path="best_cart_pole.pkl")
 
 For a more in-depth tutorial about Nevolve, you can check out:
 
-- [Applying Neuro-Evolution on Sample Environments - CartPole, MountainCar & BipedalWalkerV2](https://keras.io/getting-started/sequential-model-guide)
-- [Create your own Environment wrappers for Neuro-Evolution - Pong Game.](https://keras.io/getting-started/functional-api-guide)
-- [Saving and Loading Populations.](https://keras.io/getting-started/functional-api-guide)
+- [Applying Neuro-Evolution on Sample Environments - CartPole, MountainCar & BipedalWalkerV2](https://nevolve.ml/tutorial/example1.html)
+- [Create your own Environment wrappers for Neuro-Evolution - Pong Game.](https://nevolve.ml/tutorial/example2.html)
+- [Saving and Loading Populations.](https://nevolve.ml/tutorial/example3.html)
 
 
 ------------------
