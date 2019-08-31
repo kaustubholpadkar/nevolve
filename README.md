@@ -13,15 +13,14 @@ Nevolve is compatible with: __Python 3.5 or greater__
 
 ## Getting started: 15 seconds to Nevolve
 
-The core class of Nevolve is a __Population__, a way to organize whole Neuro-Evolution process.
+The core class of Nevolve is a __Population__, which organizes whole Neuro-Evolution process.
 
 Here is the `Population` class:
 
 ```python
 from nevolve.evolve.population import Population
 ```
-
-Here is the wrapper on `CartPole` environment from OpenAi Gym:
+A few sample environments are also provided in the library. CartPole environment is one of them. Here is the wrapper on `CartPole` environment from [OpenAi Gym](https://gym.openai.com/):
 
 ```python
 from nevolve.envs.cart_pole_v0 import CartPoleV0
@@ -64,7 +63,7 @@ Generation: 10 | Best Fitness: 200.0
 
 ![](bestcartpole.gif)
 
-Once your model looks good, save the best model with `.save_best_()`:
+Once your model performs the best for you, save the best model with `.save_best_()`:
 
 ```python
 model.save_best_(path="best_cart_pole.pkl")
@@ -115,9 +114,9 @@ sudo python setup.py install
 
 ## Future enhancement
 
-- Adding support for NEAT algorithm and its variations which can evolve the weights and the topology of the Neural Network.
-- Introducing some computational optimizations in Neural Network library and Evolutionary Algorithm.
-- Introducing few new wrappers for OpenAI Gym and other environments.
+- To add support for NEAT algorithm and its variations which can evolve the weights and the topology of the Neural Network.
+- To Introduce some computational optimizations in Neural Network library and Evolutionary Algorithm.
+- To Introduce a few new wrappers for OpenAI Gym and other environments.
 
 ------------------
 
