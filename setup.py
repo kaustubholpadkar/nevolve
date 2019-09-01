@@ -2,6 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="nevolve",
+    packages=['nevolve'],
     version="0.0.1",
     author="Kaustubh Olpadkar",
     description=(
