@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Nevolve : Saving and Loading Populations.</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
+</head>
+
+<body>
+<div class="container">
+<br>
+<h2>Saving and Loading Populations.:</h2>
+<br>
+<h5>1. Saving Population:</h5>
+<p>
+<h6>Step 1: Create the Population.</h6>
+<pre class="brush: python">
+from nevolve.evolve.population import Population
+from nevolve.envs.cart_pole_v0 import CartPoleV0
+
+model = Population(
+    cls=CartPoleV0,
+    size=100,
+    mutation_rate=0.05,
+    max_workers=10
+)
+</pre>
+<h6>Step 2: Start Evolution.</h6>
+<pre class="brush: python">
+model.evolve(
+    max_generation=100,
+    show_best=True
+)
+</pre>
+<h6>Step 3: Save the Population.</h6>
+<pre class="brush: python">
+model.save_population(path="trained_population.pkl")
+</pre>
+<h6>Step 4: Save the Best agent of the Population.</h6>
+<pre class="brush: python">
+model.save_best_(path="best_population.pkl")
+</pre>
+
+<br>
+<h5>2. Loading Population:</h5>
+<p>
+<h6>Step 1: Create the Population.</h6>
+<pre class="brush: python">
+from nevolve.evolve.population import Population
+from nevolve.envs.cart_pole_v0 import CartPoleV0
+
+model = Population(
+    cls=CartPoleV0,
+    size=100,
+    mutation_rate=0.05,
+    max_workers=10
+)
+</pre>
+<h6>Step 2: Load pre-trained population from file.</h6>
+<pre class="brush: python">
+model.load_population(path="trained_population.pkl")
+</pre>
+<h6>Step 3: Save the Population.</h6>
+<pre class="brush: python">
+model.save_population(path="trained_population.pkl")
+</pre>
+<h6>Step 4: Load the pre-trained Best agent of the Population from file.</h6>
+<pre class="brush: python">
+model.load_best_(path="best_population.pkl")
+</pre>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</div>
+</body>
+</html>

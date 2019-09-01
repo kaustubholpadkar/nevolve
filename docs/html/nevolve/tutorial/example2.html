@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Nevolve : Create your own Environment wrappers for Neuro-Evolution - Pong Game.</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
+</head>
+
+<body>
+<div class="container">
+    <br>
+    <h2>Create your own Environment wrappers for Neuro-Evolution:</h2>
+    <br>
+    <h4>Pong Game Environment:</h4>
+    <p>
+    <h6>Step 1: Import Libraries.</h6>
+    <pre class="brush: python">
+import gym
+import numpy as np
+from nevolve.envs import GymEnvironment
+
+gym.logger.set_level(40)
+</pre>
+    <h6>Step 2: Create class PongRamV0.</h6>
+    <pre class="brush: python">
+class PongRamV0(GymEnvironment):
+    """
+	Wrapper for Pong-ram-v0 environment of OpenAI Gym.
+
+	Attributes:
+		brain: NeuralNetwork instance
+		env: Environment instance
+		configuration: Neural Network Configuration
+		cls: Environment Class Reference
+		dead: bool - if agent is dead
+		action: Action to be taken at next step
+		fitness: Fitness of agent
+		score: Score of agent
+		observation: Observation of Environment
+	"""
+</pre>
+    <h6>Step 3: Define Constructor.</h6>
+    <p>Create OpenAi Gym environment object, initial observation, neural network configuration and neural network
+        instance as follows.</p>
+
+    <pre class="brush: python">
+class PongRamV0(GymEnvironment):
+    """
+	Wrapper for Pong-ram-v0 environment of OpenAI Gym.
+
+	Attributes:
+		brain: NeuralNetwork instance
+		env: Environment instance
+		configuration: Neural Network Configuration
+		cls: Environment Class Reference
+		dead: bool - if agent is dead
+		action: Action to be taken at next step
+		fitness: Fitness of agent
+		score: Score of agent
+		observation: Observation of Environment
+	"""
+
+	def __init__(self):
+		super().__init__()
+
+		self.env = gym.make("Pong-ram-v0")
+		self.observation = self.env.reset()
+
+		self.configuration = self.get_config()
+		self.brain = self.create_brain()
+</pre>
+
+    <h6>Step 4: Define function 'think' for inference based on current observation.</h6>
+    <p>Define the method <b>think</b>. Pre-process the current observation and select the action based on neural network
+        inference.</p>
+    <p>In this environment, observation space consists of 128 bytes. For scaling each value, we can divide each byte
+        value by 255.</p>
+
+    <pre class="brush: python">
+class PongRamV0(GymEnvironment):
+    """
+	Wrapper for Pong-ram-v0 environment of OpenAI Gym.
+
+	Attributes:
+		brain: NeuralNetwork instance
+		env: Environment instance
+		configuration: Neural Network Configuration
+		cls: Environment Class Reference
+		dead: bool - if agent is dead
+		action: Action to be taken at next step
+		fitness: Fitness of agent
+		score: Score of agent
+		observation: Observation of Environment
+	"""
+
+	def __init__(self):
+		super().__init__()
+
+		self.env = gym.make("Pong-ram-v0")
+		self.observation = self.env.reset()
+
+		self.configuration = self.get_config()
+		self.brain = self.create_brain()
+
+	def think(self):
+		"""
+		Function for inference based on current observation
+		"""
+		inputs = self.observation
+
+		for i in range(len(inputs)):
+			inputs[i] /= 255.0
+
+		inputs = np.reshape(inputs, newshape=(1, -1))
+		outputs = self.brain.predict(inputs)
+		self.action = np.argmax(outputs)
+</pre>
+
+	<h6>Step 5: Define method 'act' to apply the action and get observation and rewards.</h6>
+    <p>Define the method <b>act</b>. Apply the action in the environment and get observation as well as reward.</p>
+
+    <pre class="brush: python">
+class PongRamV0(GymEnvironment):
+    """
+	Wrapper for Pong-ram-v0 environment of OpenAI Gym.
+
+	Attributes:
+		brain: NeuralNetwork instance
+		env: Environment instance
+		configuration: Neural Network Configuration
+		cls: Environment Class Reference
+		dead: bool - if agent is dead
+		action: Action to be taken at next step
+		fitness: Fitness of agent
+		score: Score of agent
+		observation: Observation of Environment
+	"""
+
+	def __init__(self):
+		super().__init__()
+
+		self.env = gym.make("Pong-ram-v0")
+		self.observation = self.env.reset()
+
+		self.configuration = self.get_config()
+		self.brain = self.create_brain()
+
+	def think(self):
+		"""
+		Function for inference based on current observation
+		"""
+		inputs = self.observation
+
+		for i in range(len(inputs)):
+			inputs[i] /= 255.0
+
+		inputs = np.reshape(inputs, newshape=(1, -1))
+		outputs = self.brain.predict(inputs)
+		self.action = np.argmax(outputs)
+
+	def act(self):
+		"""
+		Function to apply the action and get observation and rewards
+		"""
+		self.observation, reward, self.dead, info = self.env.step(self.action)
+		self.fitness += reward
+		self.score += reward
+</pre>
+
+
+	<h6>Step 5: Define method 'calculate_fitness' to set the fitness before applying natural selection.</h6>
+	<p>Define the method <b>calculate_fitness</b>. In this case, you can simply assign the value of score as the fitness.</p>
+	<p>In some complex environments, you would like to manipulate the value of score before setting the fitness. (For example, squaring the fitness, absolute value, etc.)</p>
+
+    <pre class="brush: python">
+class PongRamV0(GymEnvironment):
+    """
+	Wrapper for Pong-ram-v0 environment of OpenAI Gym.
+
+	Attributes:
+		brain: NeuralNetwork instance
+		env: Environment instance
+		configuration: Neural Network Configuration
+		cls: Environment Class Reference
+		dead: bool - if agent is dead
+		action: Action to be taken at next step
+		fitness: Fitness of agent
+		score: Score of agent
+		observation: Observation of Environment
+	"""
+
+	def __init__(self):
+		super().__init__()
+
+		self.env = gym.make("Pong-ram-v0")
+		self.observation = self.env.reset()
+
+		self.configuration = self.get_config()
+		self.brain = self.create_brain()
+
+	def think(self):
+		"""
+		Function for inference based on current observation
+		"""
+		inputs = self.observation
+
+		for i in range(len(inputs)):
+			inputs[i] /= 255.0
+
+		inputs = np.reshape(inputs, newshape=(1, -1))
+		outputs = self.brain.predict(inputs)
+		self.action = np.argmax(outputs)
+
+	def act(self):
+		"""
+		Function to apply the action and get observation and rewards
+		"""
+		self.observation, reward, self.dead, info = self.env.step(self.action)
+		self.fitness += reward
+		self.score += reward
+
+	def calculate_fitness(self):
+		"""
+		Function to set fitness while applying natural selection
+		"""
+		self.fitness = self.score
+</pre>
+
+
+	<h6>Step 6: Define method 'get_config' to create neural network configuration.</h6>
+	<p>Define the method <b>get_config</b>. Define the Neural Network architecture for the agent.</p>
+	<p>As Pong Environment has 128 bytes as observation and 6 possible distinct actions, neural network will have 128 as the input dimension and 6 as output dimension with softmax activation.</p>
+
+    <pre class="brush: python">
+class PongRamV0(GymEnvironment):
+    """
+	Wrapper for Pong-ram-v0 environment of OpenAI Gym.
+
+	Attributes:
+		brain: NeuralNetwork instance
+		env: Environment instance
+		configuration: Neural Network Configuration
+		cls: Environment Class Reference
+		dead: bool - if agent is dead
+		action: Action to be taken at next step
+		fitness: Fitness of agent
+		score: Score of agent
+		observation: Observation of Environment
+	"""
+
+	def __init__(self):
+		super().__init__()
+
+		self.env = gym.make("Pong-ram-v0")
+		self.observation = self.env.reset()
+
+		self.configuration = self.get_config()
+		self.brain = self.create_brain()
+
+	def think(self):
+		"""
+		Function for inference based on current observation
+		"""
+		inputs = self.observation
+
+		for i in range(len(inputs)):
+			inputs[i] /= 255.0
+
+		inputs = np.reshape(inputs, newshape=(1, -1))
+		outputs = self.brain.predict(inputs)
+		self.action = np.argmax(outputs)
+
+	def act(self):
+		"""
+		Function to apply the action and get observation and rewards
+		"""
+		self.observation, reward, self.dead, info = self.env.step(self.action)
+		self.fitness += reward
+		self.score += reward
+
+	def calculate_fitness(self):
+		"""
+		Function to set fitness while applying natural selection
+		"""
+		self.fitness = self.score
+
+		def get_config(self):
+		"""
+		Get Neural Network Configuration
+
+		Returns:
+			list - Neural Network Configuration
+
+			Examples:
+
+				To create Neural Network with 1 hidden layer with input dimension 2, hidden nodes 5 and output
+				dimension 1, use following configuration.
+
+				[
+					{"input_dim": 2, "output_dim": 5, "activation": "sigmoid"},
+					{"input_dim": 5, "output_dim": 1, "activation": "softmax"}
+				]
+
+		"""
+		input_size = self.env.observation_space.shape[0]
+		hidden_size = 16
+		output_size = self.env.action_space.n
+		return [
+			{"input_dim": input_size, "output_dim": hidden_size, "activation": "sigmoid"},
+			{"input_dim": hidden_size, "output_dim": output_size, "activation": "softmax"}
+		]
+</pre>
+	<h6>Step 7: Import the environment and start Neuro-Evolution.</h6>
+	<p>You can import this class as any other sample environment and start training.</p>
+	<br>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+</div>
+</body>
+</html>
