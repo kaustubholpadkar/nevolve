@@ -41,7 +41,7 @@ Start Evolution:
 
 ```python
 model.evolve(
-    max_generation=100,
+    max_generation=10,
     show_best=True
 )
 ```
@@ -109,6 +109,15 @@ cd nevolve
 sudo python setup.py install
 ```
 
+- **Install OpenAI Gym (optional):**
+
+If you want to run the sample environments or create a wrapper on the environment from OpenAI Gym, you need to install its package using following command.
+
+```sh
+pip install gym
+```
+
+For more information on OpenAi Gym and installation, please visit [this](http://gym.openai.com/docs/#installation). 
 
 ------------------
 
