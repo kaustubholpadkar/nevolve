@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Nevolve : Applying Neuro-Evolution on Sample Environments - CartPole, MountainCar & BipedalWalkerV2</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
+</head>
+
+<body>
+<div class="container">
+<br>
+<h2>Applying Neuro-Evolution on Sample Environments:</h2>
+<br>
+<h4>CartPole Environment:</h4>
+<p>
+<h6>Step 1: Import Population and CartPoleV0 classes.</h6>
+<pre class="brush: python">
+from nevolve.evolve.population import Population
+from nevolve.envs.cart_pole_v0 import CartPoleV0
+</pre>
+<h6>Step 2: Create Population instance.</h6>
+<pre class="brush: python">
+model = Population(
+    cls=CartPoleV0,
+    size=100,
+    mutation_rate=0.05,
+    max_workers=10
+)
+</pre>
+<h6>Step 3: Start Evolution.</h6>
+<pre class="brush: python">
+model.evolve(
+    max_generation=100,
+    show_best=True
+)
+</pre>
+<h6>Results:</h6>
+<pre class="brush: python">
+Generation: 1 | Best Fitness: 27.0
+Generation: 2 | Best Fitness: 21.0
+Generation: 3 | Best Fitness: 41.0
+Generation: 4 | Best Fitness: 49.0
+Generation: 5 | Best Fitness: 62.0
+Generation: 6 | Best Fitness: 48.0
+Generation: 7 | Best Fitness: 200.0
+Generation: 8 | Best Fitness: 200.0
+Generation: 9 | Best Fitness: 200.0
+Generation: 10 | Best Fitness: 200.0
+</pre>
+<h6>Note:</h6>
+<p>For MountainCar Environment, import class <b>MountainCar</b> from <b>nevolve.envs.mountain_car_v0</b> module.</p>
+<p>For BipedalWalkerV2 Environment, import class <b>BipedalWalkerV2</b> from <b>nevolve.envs.bipedal_walker_v2</b> module.</p>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</div>
+</body>
+</html>

@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>nevolve.neuro.dnn API documentation</title>
+<meta name="description" content="Module for Deep Neural Network implementation." />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>nevolve.neuro.dnn</code></h1>
+</header>
+<section id="section-intro">
+<p>Module for Deep Neural Network implementation.</p>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">&#34;&#34;&#34;
+Module for Deep Neural Network implementation.
+&#34;&#34;&#34;
+
+
+import numpy as np
+from nevolve.neuro import activations
+
+
+class DNN:
+        &#34;&#34;&#34;
+        Class for Deep Neural Network
+
+
+        Args:
+                config: dict - Neural Network Configuration
+
+        Attributes:
+                weights: list of weights for all each layer
+                biases: list of biases for all each layer
+                activations: list of activation functions for all each layer
+        &#34;&#34;&#34;
+
+        def __init__(self, config):
+
+                self.weights = []
+                self.biases = []
+                self.activations = []
+
+                for cfg in config:
+                        input_dim = cfg[&#34;input_dim&#34;]
+                        output_dim = cfg[&#34;output_dim&#34;]
+                        activation = cfg[&#34;activation&#34;]
+
+                        self.weights.append(np.random.normal(size=(input_dim, output_dim)))
+                        self.biases.append(np.random.normal(size=(1, output_dim)))
+                        self.activations.append(activation)
+
+        def predict(self, x):
+                &#34;&#34;&#34;
+                Predict the output for given input - Forward Pass of Neural Network
+
+                Args:
+                        x: numpy array - input data
+
+                Returns:
+                        prediction - numpy array
+                &#34;&#34;&#34;
+
+                A = x
+                for weight, bias, activation in zip(self.weights, self.biases, self.activations):
+                        Z = np.matmul(A, weight) + bias
+                        A = activations.activate(Z, activation)
+                return A
+
+        def get_weights(self):
+                &#34;&#34;&#34;
+                Get the Weights
+
+                Returns:
+                        tuple - (weights, biases)
+                &#34;&#34;&#34;
+                return self.weights, self.biases
+
+        def set_weights(self, weights, biases):
+                &#34;&#34;&#34;
+                Set the Weights
+
+                Args:
+                        weights: numpy array
+                        biases: numpy array
+                &#34;&#34;&#34;
+                self.weights, self.biases = weights, biases
+
+        def serialize(self):
+                &#34;&#34;&#34;
+                Serialize the Neural Network
+
+                Returns:
+                        tuple
+                &#34;&#34;&#34;
+                return self.weights, self.biases, self.activations
+
+        def deserialize(self, data):
+                &#34;&#34;&#34;
+                Deserialize the Neural Network
+
+                Args:
+                        data: tuple - (weights, biases, activations)
+                &#34;&#34;&#34;
+                weights, biases, activations = data
+                self.weights = [weight for weight in weights]
+                self.biases = [bias for bias in biases]
+                self.activations = [activation for activation in activations]</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="nevolve.neuro.dnn.DNN"><code class="flex name class">
+<span>class <span class="ident">DNN</span></span>
+<span>(</span><span>config)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class for Deep Neural Network</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>config</code></strong></dt>
+<dd>dict - Neural Network Configuration</dd>
+</dl>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>weights</code></strong></dt>
+<dd>list of weights for all each layer</dd>
+<dt><strong><code>biases</code></strong></dt>
+<dd>list of biases for all each layer</dd>
+<dt><strong><code>activations</code></strong></dt>
+<dd>list of activation functions for all each layer</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class DNN:
+        &#34;&#34;&#34;
+        Class for Deep Neural Network
+
+
+        Args:
+                config: dict - Neural Network Configuration
+
+        Attributes:
+                weights: list of weights for all each layer
+                biases: list of biases for all each layer
+                activations: list of activation functions for all each layer
+        &#34;&#34;&#34;
+
+        def __init__(self, config):
+
+                self.weights = []
+                self.biases = []
+                self.activations = []
+
+                for cfg in config:
+                        input_dim = cfg[&#34;input_dim&#34;]
+                        output_dim = cfg[&#34;output_dim&#34;]
+                        activation = cfg[&#34;activation&#34;]
+
+                        self.weights.append(np.random.normal(size=(input_dim, output_dim)))
+                        self.biases.append(np.random.normal(size=(1, output_dim)))
+                        self.activations.append(activation)
+
+        def predict(self, x):
+                &#34;&#34;&#34;
+                Predict the output for given input - Forward Pass of Neural Network
+
+                Args:
+                        x: numpy array - input data
+
+                Returns:
+                        prediction - numpy array
+                &#34;&#34;&#34;
+
+                A = x
+                for weight, bias, activation in zip(self.weights, self.biases, self.activations):
+                        Z = np.matmul(A, weight) + bias
+                        A = activations.activate(Z, activation)
+                return A
+
+        def get_weights(self):
+                &#34;&#34;&#34;
+                Get the Weights
+
+                Returns:
+                        tuple - (weights, biases)
+                &#34;&#34;&#34;
+                return self.weights, self.biases
+
+        def set_weights(self, weights, biases):
+                &#34;&#34;&#34;
+                Set the Weights
+
+                Args:
+                        weights: numpy array
+                        biases: numpy array
+                &#34;&#34;&#34;
+                self.weights, self.biases = weights, biases
+
+        def serialize(self):
+                &#34;&#34;&#34;
+                Serialize the Neural Network
+
+                Returns:
+                        tuple
+                &#34;&#34;&#34;
+                return self.weights, self.biases, self.activations
+
+        def deserialize(self, data):
+                &#34;&#34;&#34;
+                Deserialize the Neural Network
+
+                Args:
+                        data: tuple - (weights, biases, activations)
+                &#34;&#34;&#34;
+                weights, biases, activations = data
+                self.weights = [weight for weight in weights]
+                self.biases = [bias for bias in biases]
+                self.activations = [activation for activation in activations]</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="nevolve.neuro.dnn.DNN.deserialize"><code class="name flex">
+<span>def <span class="ident">deserialize</span></span>(<span>self, data)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Deserialize the Neural Network</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>data</code></strong></dt>
+<dd>tuple - (weights, biases, activations)</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def deserialize(self, data):
+        &#34;&#34;&#34;
+        Deserialize the Neural Network
+
+        Args:
+                data: tuple - (weights, biases, activations)
+        &#34;&#34;&#34;
+        weights, biases, activations = data
+        self.weights = [weight for weight in weights]
+        self.biases = [bias for bias in biases]
+        self.activations = [activation for activation in activations]</code></pre>
+</details>
+</dd>
+<dt id="nevolve.neuro.dnn.DNN.get_weights"><code class="name flex">
+<span>def <span class="ident">get_weights</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get the Weights</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>tuple</code> - (<code>weights</code>, <code>biases</code>)</dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_weights(self):
+        &#34;&#34;&#34;
+        Get the Weights
+
+        Returns:
+                tuple - (weights, biases)
+        &#34;&#34;&#34;
+        return self.weights, self.biases</code></pre>
+</details>
+</dd>
+<dt id="nevolve.neuro.dnn.DNN.predict"><code class="name flex">
+<span>def <span class="ident">predict</span></span>(<span>self, x)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Predict the output for given input - Forward Pass of Neural Network</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>x</code></strong></dt>
+<dd>numpy array - input data</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>prediction</code> - <code>numpy</code> <code>array</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def predict(self, x):
+        &#34;&#34;&#34;
+        Predict the output for given input - Forward Pass of Neural Network
+
+        Args:
+                x: numpy array - input data
+
+        Returns:
+                prediction - numpy array
+        &#34;&#34;&#34;
+
+        A = x
+        for weight, bias, activation in zip(self.weights, self.biases, self.activations):
+                Z = np.matmul(A, weight) + bias
+                A = activations.activate(Z, activation)
+        return A</code></pre>
+</details>
+</dd>
+<dt id="nevolve.neuro.dnn.DNN.serialize"><code class="name flex">
+<span>def <span class="ident">serialize</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Serialize the Neural Network</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>tuple</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def serialize(self):
+        &#34;&#34;&#34;
+        Serialize the Neural Network
+
+        Returns:
+                tuple
+        &#34;&#34;&#34;
+        return self.weights, self.biases, self.activations</code></pre>
+</details>
+</dd>
+<dt id="nevolve.neuro.dnn.DNN.set_weights"><code class="name flex">
+<span>def <span class="ident">set_weights</span></span>(<span>self, weights, biases)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set the Weights</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>weights</code></strong></dt>
+<dd>numpy array</dd>
+<dt><strong><code>biases</code></strong></dt>
+<dd>numpy array</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_weights(self, weights, biases):
+        &#34;&#34;&#34;
+        Set the Weights
+
+        Args:
+                weights: numpy array
+                biases: numpy array
+        &#34;&#34;&#34;
+        self.weights, self.biases = weights, biases</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="nevolve.neuro" href="index.html">nevolve.neuro</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="nevolve.neuro.dnn.DNN" href="#nevolve.neuro.dnn.DNN">DNN</a></code></h4>
+<ul class="">
+<li><code><a title="nevolve.neuro.dnn.DNN.deserialize" href="#nevolve.neuro.dnn.DNN.deserialize">deserialize</a></code></li>
+<li><code><a title="nevolve.neuro.dnn.DNN.get_weights" href="#nevolve.neuro.dnn.DNN.get_weights">get_weights</a></code></li>
+<li><code><a title="nevolve.neuro.dnn.DNN.predict" href="#nevolve.neuro.dnn.DNN.predict">predict</a></code></li>
+<li><code><a title="nevolve.neuro.dnn.DNN.serialize" href="#nevolve.neuro.dnn.DNN.serialize">serialize</a></code></li>
+<li><code><a title="nevolve.neuro.dnn.DNN.set_weights" href="#nevolve.neuro.dnn.DNN.set_weights">set_weights</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

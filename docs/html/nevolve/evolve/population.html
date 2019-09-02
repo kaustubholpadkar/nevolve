@@ -1,0 +1,969 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>nevolve.evolve.population API documentation</title>
+<meta name="description" content="Module for Neuro-Evolution implementation." />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>nevolve.evolve.population</code></h1>
+</header>
+<section id="section-intro">
+<p>Module for Neuro-Evolution implementation.</p>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">&#34;&#34;&#34;
+Module for Neuro-Evolution implementation.
+&#34;&#34;&#34;
+
+
+import os
+import pickle
+import numpy as np
+import threading
+from concurrent.futures import ThreadPoolExecutor
+
+
+class Population:
+        &#34;&#34;&#34;
+        Class for Neuro-Evolution
+
+        Args:
+                cls: class for the Environment
+                size: Population size
+                mutation_rate: Mutation Rate
+                max_workers: Maximum Workers
+
+        Attributes:
+                cls: class for the Environment
+                size: Population size
+                population: list
+                best_of_population: instance of the best agent in the population
+                best_score: score of the best agent in the population
+                fitness_sum: sum of the fitness of all agents in the population
+                mutation_rate: Mutation Rate
+                generation: current generation number
+                max_workers: Maximum Workers
+                pool: instance of ThreadPoolExecutor
+        &#34;&#34;&#34;
+
+        def __init__(self, cls, size=500, mutation_rate=0.05, max_workers=8):
+
+                self.cls = cls
+                self.size = size
+                self.population = []
+                self.best_of_population = None
+                self.best_score = 0
+                self.fitness_sum = 0
+
+                self.mutation_rate = mutation_rate
+
+                self.generation = 0
+
+                self.max_workers = max_workers
+                self.pool = ThreadPoolExecutor(max_workers=self.max_workers)
+
+                futures = []
+
+                for i in range(self.size):
+                        future = self.pool.submit(lambda: cls())
+                        futures.append(future)
+
+                for future in futures:
+                        self.population.append(future.result())
+
+        def set_best_of_population(self):
+                &#34;&#34;&#34;
+                Set the Best of Population
+                &#34;&#34;&#34;
+                best_obj = self.population[0]
+                for i in range(len(self.population)):
+                        obj = self.population[i]
+                        if obj.fitness &gt; best_obj.fitness:
+                                best_obj = obj
+                        if obj.dead:
+                                obj.close()
+
+                self.best_score = best_obj.fitness
+                self.best_of_population = best_obj.clone()
+
+        def select_parent(self):
+                &#34;&#34;&#34;
+                Function to select parent (Selection Algorithm based on Genetic Algorithm)
+
+                Returns:
+                        instance of Environment
+                &#34;&#34;&#34;
+                rand = np.random.random() * self.fitness_sum
+                summation = 0
+
+                for i in range(len(self.population)):
+                        obj = self.population[i]
+                        summation += obj.fitness
+                        if summation &gt; rand:
+                                return obj.clone()
+                return self.population[0].clone()
+
+        def mutate(self):
+                &#34;&#34;&#34;
+                Mutate the Population
+                &#34;&#34;&#34;
+                for obj in self.population:
+                        obj.mutate(self.mutation_rate)
+
+        def calculate_fitness(self):
+                &#34;&#34;&#34;
+                Calculate Fitness for Population
+                &#34;&#34;&#34;
+                for obj in self.population:
+                        obj.calculate_fitness()
+
+        def calculate_fitness_sum(self):
+                &#34;&#34;&#34;
+                Calculate Fitness Sum
+                &#34;&#34;&#34;
+                self.fitness_sum = 0
+                for obj in self.population:
+                        self.fitness_sum += obj.fitness
+
+        def natural_selection(self):
+                &#34;&#34;&#34;
+                Natural Selection Algorithm to create Next Generation Population
+                &#34;&#34;&#34;
+                new_population = []
+
+                self.set_best_of_population()
+                self.calculate_fitness_sum()
+
+                for i in range(len(self.population)):
+                        child = self.select_parent()
+                        child.mutate(self.mutation_rate)
+                        new_population.append(child)
+
+                self.population = new_population
+                self.generation += 1
+
+        def close(self):
+                &#34;&#34;&#34;
+                Function to clean up the Population
+                &#34;&#34;&#34;
+                for obj in self.population:
+                        obj.close()
+
+        def explore(self, index):
+                &#34;&#34;&#34;
+                Explore the Environment
+
+                Args:
+                        index: index of agent to explore
+                &#34;&#34;&#34;
+                agent = self.population[index]
+
+                while not agent.dead:
+                        agent.think()
+                        agent.act()
+
+        def evolve(self, max_generation=100, show_best=False, checkpoint=False, checkpoint_dir=&#34;.&#34;, checkpoint_prefix=&#34;&#34;, verbose=True):
+                &#34;&#34;&#34;
+                Function to start Neuro-Evolution
+
+                Args:
+                        show_best: show best population
+                        checkpoint: checkpoint flag
+                        checkpoint_dir: checkpoint directory
+                        checkpoint_prefix: prefix to checkpoint files
+                        verbose: print intermediate messages
+                        max_generation: Maximum number of Generations
+                &#34;&#34;&#34;
+                best_thread = None
+
+                for i in range(max_generation):
+                        if show_best:
+                                best_thread = threading.Thread(target=self.display_best)
+                                best_thread.start()
+
+                        futures = []
+
+                        for index in range(len(self.population)):
+                                future = self.pool.submit(self.explore, index)
+                                futures.append(future)
+
+                        for future in futures:
+                                future.result()
+
+                        if show_best:
+                                best_thread.join()
+
+                        if checkpoint:
+                                file_path = os.path.join(checkpoint_dir, &#34;{}_generation_{}.pkl&#34;.format(checkpoint_prefix, i+1))
+                                self.save_population(file_path)
+
+                        self.calculate_fitness()
+                        self.natural_selection()
+
+                        if verbose:
+                                print(&#34;Generation: {} | Best Fitness: {}&#34;.format(i+1, self.best_score))
+
+                self.close()
+
+        def display_best(self):
+                &#34;&#34;&#34;
+                Function to Display Best Agent
+                &#34;&#34;&#34;
+                while self.best_of_population and not self.best_of_population.dead:
+                        self.best_of_population.think()
+                        self.best_of_population.act()
+                        self.best_of_population.show()
+
+                if self.best_of_population:
+                        self.best_of_population.close()
+
+        def save_population(self, path):
+                &#34;&#34;&#34;
+                Save the Population to File
+
+                Args:
+                        path: path where to store file
+                &#34;&#34;&#34;
+                data = [obj.get_brain() for obj in self.population]
+                with open(path, &#39;wb&#39;) as outfile:
+                        pickle.dump(data, outfile, pickle.HIGHEST_PROTOCOL)
+
+        def load_population(self, path):
+                &#34;&#34;&#34;
+                Load the Population from File
+
+                Args:
+                        path: path from where to load population
+                &#34;&#34;&#34;
+                with open(path, &#39;rb&#39;) as infile:
+                        data = pickle.load(infile)
+
+                for i in range(len(data)):
+                        self.population[i].set_brain(data[i])
+
+        def save_best_(self, path):
+                &#34;&#34;&#34;
+                Save the Best Population to File
+
+                Args:
+                        path: path where to store file
+                &#34;&#34;&#34;
+                with open(path, &#39;wb&#39;) as outfile:
+                        pickle.dump(self.best_of_population.get_brain(), outfile, pickle.HIGHEST_PROTOCOL)
+
+        def load_best_(self, path):
+                &#34;&#34;&#34;
+                Load the Best Population from File
+
+                Args:
+                        path: path from where to load agent
+                &#34;&#34;&#34;
+                self.best_of_population = self.cls()
+                with open(path, &#39;rb&#39;) as infile:
+                        data = pickle.load(infile)
+                        self.best_of_population.set_brain(data)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="nevolve.evolve.population.Population"><code class="flex name class">
+<span>class <span class="ident">Population</span></span>
+<span>(</span><span>cls, size=500, mutation_rate=0.05, max_workers=8)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class for Neuro-Evolution</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>cls</code></strong></dt>
+<dd>class for the Environment</dd>
+<dt><strong><code>size</code></strong></dt>
+<dd>Population size</dd>
+<dt><strong><code>mutation_rate</code></strong></dt>
+<dd>Mutation Rate</dd>
+<dt><strong><code>max_workers</code></strong></dt>
+<dd>Maximum Workers</dd>
+</dl>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>cls</code></strong></dt>
+<dd>class for the Environment</dd>
+<dt><strong><code>size</code></strong></dt>
+<dd>Population size</dd>
+<dt><strong><code>population</code></strong></dt>
+<dd>list</dd>
+<dt><strong><code>best_of_population</code></strong></dt>
+<dd>instance of the best agent in the population</dd>
+<dt><strong><code>best_score</code></strong></dt>
+<dd>score of the best agent in the population</dd>
+<dt><strong><code>fitness_sum</code></strong></dt>
+<dd>sum of the fitness of all agents in the population</dd>
+<dt><strong><code>mutation_rate</code></strong></dt>
+<dd>Mutation Rate</dd>
+<dt><strong><code>generation</code></strong></dt>
+<dd>current generation number</dd>
+<dt><strong><code>max_workers</code></strong></dt>
+<dd>Maximum Workers</dd>
+<dt><strong><code>pool</code></strong></dt>
+<dd>instance of ThreadPoolExecutor</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Population:
+        &#34;&#34;&#34;
+        Class for Neuro-Evolution
+
+        Args:
+                cls: class for the Environment
+                size: Population size
+                mutation_rate: Mutation Rate
+                max_workers: Maximum Workers
+
+        Attributes:
+                cls: class for the Environment
+                size: Population size
+                population: list
+                best_of_population: instance of the best agent in the population
+                best_score: score of the best agent in the population
+                fitness_sum: sum of the fitness of all agents in the population
+                mutation_rate: Mutation Rate
+                generation: current generation number
+                max_workers: Maximum Workers
+                pool: instance of ThreadPoolExecutor
+        &#34;&#34;&#34;
+
+        def __init__(self, cls, size=500, mutation_rate=0.05, max_workers=8):
+
+                self.cls = cls
+                self.size = size
+                self.population = []
+                self.best_of_population = None
+                self.best_score = 0
+                self.fitness_sum = 0
+
+                self.mutation_rate = mutation_rate
+
+                self.generation = 0
+
+                self.max_workers = max_workers
+                self.pool = ThreadPoolExecutor(max_workers=self.max_workers)
+
+                futures = []
+
+                for i in range(self.size):
+                        future = self.pool.submit(lambda: cls())
+                        futures.append(future)
+
+                for future in futures:
+                        self.population.append(future.result())
+
+        def set_best_of_population(self):
+                &#34;&#34;&#34;
+                Set the Best of Population
+                &#34;&#34;&#34;
+                best_obj = self.population[0]
+                for i in range(len(self.population)):
+                        obj = self.population[i]
+                        if obj.fitness &gt; best_obj.fitness:
+                                best_obj = obj
+                        if obj.dead:
+                                obj.close()
+
+                self.best_score = best_obj.fitness
+                self.best_of_population = best_obj.clone()
+
+        def select_parent(self):
+                &#34;&#34;&#34;
+                Function to select parent (Selection Algorithm based on Genetic Algorithm)
+
+                Returns:
+                        instance of Environment
+                &#34;&#34;&#34;
+                rand = np.random.random() * self.fitness_sum
+                summation = 0
+
+                for i in range(len(self.population)):
+                        obj = self.population[i]
+                        summation += obj.fitness
+                        if summation &gt; rand:
+                                return obj.clone()
+                return self.population[0].clone()
+
+        def mutate(self):
+                &#34;&#34;&#34;
+                Mutate the Population
+                &#34;&#34;&#34;
+                for obj in self.population:
+                        obj.mutate(self.mutation_rate)
+
+        def calculate_fitness(self):
+                &#34;&#34;&#34;
+                Calculate Fitness for Population
+                &#34;&#34;&#34;
+                for obj in self.population:
+                        obj.calculate_fitness()
+
+        def calculate_fitness_sum(self):
+                &#34;&#34;&#34;
+                Calculate Fitness Sum
+                &#34;&#34;&#34;
+                self.fitness_sum = 0
+                for obj in self.population:
+                        self.fitness_sum += obj.fitness
+
+        def natural_selection(self):
+                &#34;&#34;&#34;
+                Natural Selection Algorithm to create Next Generation Population
+                &#34;&#34;&#34;
+                new_population = []
+
+                self.set_best_of_population()
+                self.calculate_fitness_sum()
+
+                for i in range(len(self.population)):
+                        child = self.select_parent()
+                        child.mutate(self.mutation_rate)
+                        new_population.append(child)
+
+                self.population = new_population
+                self.generation += 1
+
+        def close(self):
+                &#34;&#34;&#34;
+                Function to clean up the Population
+                &#34;&#34;&#34;
+                for obj in self.population:
+                        obj.close()
+
+        def explore(self, index):
+                &#34;&#34;&#34;
+                Explore the Environment
+
+                Args:
+                        index: index of agent to explore
+                &#34;&#34;&#34;
+                agent = self.population[index]
+
+                while not agent.dead:
+                        agent.think()
+                        agent.act()
+
+        def evolve(self, max_generation=100, show_best=False, checkpoint=False, checkpoint_dir=&#34;.&#34;, checkpoint_prefix=&#34;&#34;, verbose=True):
+                &#34;&#34;&#34;
+                Function to start Neuro-Evolution
+
+                Args:
+                        show_best: show best population
+                        checkpoint: checkpoint flag
+                        checkpoint_dir: checkpoint directory
+                        checkpoint_prefix: prefix to checkpoint files
+                        verbose: print intermediate messages
+                        max_generation: Maximum number of Generations
+                &#34;&#34;&#34;
+                best_thread = None
+
+                for i in range(max_generation):
+                        if show_best:
+                                best_thread = threading.Thread(target=self.display_best)
+                                best_thread.start()
+
+                        futures = []
+
+                        for index in range(len(self.population)):
+                                future = self.pool.submit(self.explore, index)
+                                futures.append(future)
+
+                        for future in futures:
+                                future.result()
+
+                        if show_best:
+                                best_thread.join()
+
+                        if checkpoint:
+                                file_path = os.path.join(checkpoint_dir, &#34;{}_generation_{}.pkl&#34;.format(checkpoint_prefix, i+1))
+                                self.save_population(file_path)
+
+                        self.calculate_fitness()
+                        self.natural_selection()
+
+                        if verbose:
+                                print(&#34;Generation: {} | Best Fitness: {}&#34;.format(i+1, self.best_score))
+
+                self.close()
+
+        def display_best(self):
+                &#34;&#34;&#34;
+                Function to Display Best Agent
+                &#34;&#34;&#34;
+                while self.best_of_population and not self.best_of_population.dead:
+                        self.best_of_population.think()
+                        self.best_of_population.act()
+                        self.best_of_population.show()
+
+                if self.best_of_population:
+                        self.best_of_population.close()
+
+        def save_population(self, path):
+                &#34;&#34;&#34;
+                Save the Population to File
+
+                Args:
+                        path: path where to store file
+                &#34;&#34;&#34;
+                data = [obj.get_brain() for obj in self.population]
+                with open(path, &#39;wb&#39;) as outfile:
+                        pickle.dump(data, outfile, pickle.HIGHEST_PROTOCOL)
+
+        def load_population(self, path):
+                &#34;&#34;&#34;
+                Load the Population from File
+
+                Args:
+                        path: path from where to load population
+                &#34;&#34;&#34;
+                with open(path, &#39;rb&#39;) as infile:
+                        data = pickle.load(infile)
+
+                for i in range(len(data)):
+                        self.population[i].set_brain(data[i])
+
+        def save_best_(self, path):
+                &#34;&#34;&#34;
+                Save the Best Population to File
+
+                Args:
+                        path: path where to store file
+                &#34;&#34;&#34;
+                with open(path, &#39;wb&#39;) as outfile:
+                        pickle.dump(self.best_of_population.get_brain(), outfile, pickle.HIGHEST_PROTOCOL)
+
+        def load_best_(self, path):
+                &#34;&#34;&#34;
+                Load the Best Population from File
+
+                Args:
+                        path: path from where to load agent
+                &#34;&#34;&#34;
+                self.best_of_population = self.cls()
+                with open(path, &#39;rb&#39;) as infile:
+                        data = pickle.load(infile)
+                        self.best_of_population.set_brain(data)</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="nevolve.evolve.population.Population.calculate_fitness"><code class="name flex">
+<span>def <span class="ident">calculate_fitness</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Calculate Fitness for Population</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def calculate_fitness(self):
+        &#34;&#34;&#34;
+        Calculate Fitness for Population
+        &#34;&#34;&#34;
+        for obj in self.population:
+                obj.calculate_fitness()</code></pre>
+</details>
+</dd>
+<dt id="nevolve.evolve.population.Population.calculate_fitness_sum"><code class="name flex">
+<span>def <span class="ident">calculate_fitness_sum</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Calculate Fitness Sum</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def calculate_fitness_sum(self):
+        &#34;&#34;&#34;
+        Calculate Fitness Sum
+        &#34;&#34;&#34;
+        self.fitness_sum = 0
+        for obj in self.population:
+                self.fitness_sum += obj.fitness</code></pre>
+</details>
+</dd>
+<dt id="nevolve.evolve.population.Population.close"><code class="name flex">
+<span>def <span class="ident">close</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Function to clean up the Population</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def close(self):
+        &#34;&#34;&#34;
+        Function to clean up the Population
+        &#34;&#34;&#34;
+        for obj in self.population:
+                obj.close()</code></pre>
+</details>
+</dd>
+<dt id="nevolve.evolve.population.Population.display_best"><code class="name flex">
+<span>def <span class="ident">display_best</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Function to Display Best Agent</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def display_best(self):
+        &#34;&#34;&#34;
+        Function to Display Best Agent
+        &#34;&#34;&#34;
+        while self.best_of_population and not self.best_of_population.dead:
+                self.best_of_population.think()
+                self.best_of_population.act()
+                self.best_of_population.show()
+
+        if self.best_of_population:
+                self.best_of_population.close()</code></pre>
+</details>
+</dd>
+<dt id="nevolve.evolve.population.Population.evolve"><code class="name flex">
+<span>def <span class="ident">evolve</span></span>(<span>self, max_generation=100, show_best=False, checkpoint=False, checkpoint_dir='.', checkpoint_prefix='', verbose=True)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Function to start Neuro-Evolution</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>show_best</code></strong></dt>
+<dd>show best population</dd>
+<dt><strong><code>checkpoint</code></strong></dt>
+<dd>checkpoint flag</dd>
+<dt><strong><code>checkpoint_dir</code></strong></dt>
+<dd>checkpoint directory</dd>
+<dt><strong><code>checkpoint_prefix</code></strong></dt>
+<dd>prefix to checkpoint files</dd>
+<dt><strong><code>verbose</code></strong></dt>
+<dd>print intermediate messages</dd>
+<dt><strong><code>max_generation</code></strong></dt>
+<dd>Maximum number of Generations</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def evolve(self, max_generation=100, show_best=False, checkpoint=False, checkpoint_dir=&#34;.&#34;, checkpoint_prefix=&#34;&#34;, verbose=True):
+        &#34;&#34;&#34;
+        Function to start Neuro-Evolution
+
+        Args:
+                show_best: show best population
+                checkpoint: checkpoint flag
+                checkpoint_dir: checkpoint directory
+                checkpoint_prefix: prefix to checkpoint files
+                verbose: print intermediate messages
+                max_generation: Maximum number of Generations
+        &#34;&#34;&#34;
+        best_thread = None
+
+        for i in range(max_generation):
+                if show_best:
+                        best_thread = threading.Thread(target=self.display_best)
+                        best_thread.start()
+
+                futures = []
+
+                for index in range(len(self.population)):
+                        future = self.pool.submit(self.explore, index)
+                        futures.append(future)
+
+                for future in futures:
+                        future.result()
+
+                if show_best:
+                        best_thread.join()
+
+                if checkpoint:
+                        file_path = os.path.join(checkpoint_dir, &#34;{}_generation_{}.pkl&#34;.format(checkpoint_prefix, i+1))
+                        self.save_population(file_path)
+
+                self.calculate_fitness()
+                self.natural_selection()
+
+                if verbose:
+                        print(&#34;Generation: {} | Best Fitness: {}&#34;.format(i+1, self.best_score))
+
+        self.close()</code></pre>
+</details>
+</dd>
+<dt id="nevolve.evolve.population.Population.explore"><code class="name flex">
+<span>def <span class="ident">explore</span></span>(<span>self, index)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Explore the Environment</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>index</code></strong></dt>
+<dd>index of agent to explore</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def explore(self, index):
+        &#34;&#34;&#34;
+        Explore the Environment
+
+        Args:
+                index: index of agent to explore
+        &#34;&#34;&#34;
+        agent = self.population[index]
+
+        while not agent.dead:
+                agent.think()
+                agent.act()</code></pre>
+</details>
+</dd>
+<dt id="nevolve.evolve.population.Population.load_best_"><code class="name flex">
+<span>def <span class="ident">load_best_</span></span>(<span>self, path)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Load the Best Population from File</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>path</code></strong></dt>
+<dd>path from where to load agent</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def load_best_(self, path):
+        &#34;&#34;&#34;
+        Load the Best Population from File
+
+        Args:
+                path: path from where to load agent
+        &#34;&#34;&#34;
+        self.best_of_population = self.cls()
+        with open(path, &#39;rb&#39;) as infile:
+                data = pickle.load(infile)
+                self.best_of_population.set_brain(data)</code></pre>
+</details>
+</dd>
+<dt id="nevolve.evolve.population.Population.load_population"><code class="name flex">
+<span>def <span class="ident">load_population</span></span>(<span>self, path)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Load the Population from File</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>path</code></strong></dt>
+<dd>path from where to load population</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def load_population(self, path):
+        &#34;&#34;&#34;
+        Load the Population from File
+
+        Args:
+                path: path from where to load population
+        &#34;&#34;&#34;
+        with open(path, &#39;rb&#39;) as infile:
+                data = pickle.load(infile)
+
+        for i in range(len(data)):
+                self.population[i].set_brain(data[i])</code></pre>
+</details>
+</dd>
+<dt id="nevolve.evolve.population.Population.mutate"><code class="name flex">
+<span>def <span class="ident">mutate</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Mutate the Population</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def mutate(self):
+        &#34;&#34;&#34;
+        Mutate the Population
+        &#34;&#34;&#34;
+        for obj in self.population:
+                obj.mutate(self.mutation_rate)</code></pre>
+</details>
+</dd>
+<dt id="nevolve.evolve.population.Population.natural_selection"><code class="name flex">
+<span>def <span class="ident">natural_selection</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Natural Selection Algorithm to create Next Generation Population</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def natural_selection(self):
+        &#34;&#34;&#34;
+        Natural Selection Algorithm to create Next Generation Population
+        &#34;&#34;&#34;
+        new_population = []
+
+        self.set_best_of_population()
+        self.calculate_fitness_sum()
+
+        for i in range(len(self.population)):
+                child = self.select_parent()
+                child.mutate(self.mutation_rate)
+                new_population.append(child)
+
+        self.population = new_population
+        self.generation += 1</code></pre>
+</details>
+</dd>
+<dt id="nevolve.evolve.population.Population.save_best_"><code class="name flex">
+<span>def <span class="ident">save_best_</span></span>(<span>self, path)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Save the Best Population to File</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>path</code></strong></dt>
+<dd>path where to store file</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def save_best_(self, path):
+        &#34;&#34;&#34;
+        Save the Best Population to File
+
+        Args:
+                path: path where to store file
+        &#34;&#34;&#34;
+        with open(path, &#39;wb&#39;) as outfile:
+                pickle.dump(self.best_of_population.get_brain(), outfile, pickle.HIGHEST_PROTOCOL)</code></pre>
+</details>
+</dd>
+<dt id="nevolve.evolve.population.Population.save_population"><code class="name flex">
+<span>def <span class="ident">save_population</span></span>(<span>self, path)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Save the Population to File</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>path</code></strong></dt>
+<dd>path where to store file</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def save_population(self, path):
+        &#34;&#34;&#34;
+        Save the Population to File
+
+        Args:
+                path: path where to store file
+        &#34;&#34;&#34;
+        data = [obj.get_brain() for obj in self.population]
+        with open(path, &#39;wb&#39;) as outfile:
+                pickle.dump(data, outfile, pickle.HIGHEST_PROTOCOL)</code></pre>
+</details>
+</dd>
+<dt id="nevolve.evolve.population.Population.select_parent"><code class="name flex">
+<span>def <span class="ident">select_parent</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Function to select parent (Selection Algorithm based on Genetic Algorithm)</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>instance</code> of <code>Environment</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def select_parent(self):
+        &#34;&#34;&#34;
+        Function to select parent (Selection Algorithm based on Genetic Algorithm)
+
+        Returns:
+                instance of Environment
+        &#34;&#34;&#34;
+        rand = np.random.random() * self.fitness_sum
+        summation = 0
+
+        for i in range(len(self.population)):
+                obj = self.population[i]
+                summation += obj.fitness
+                if summation &gt; rand:
+                        return obj.clone()
+        return self.population[0].clone()</code></pre>
+</details>
+</dd>
+<dt id="nevolve.evolve.population.Population.set_best_of_population"><code class="name flex">
+<span>def <span class="ident">set_best_of_population</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set the Best of Population</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_best_of_population(self):
+        &#34;&#34;&#34;
+        Set the Best of Population
+        &#34;&#34;&#34;
+        best_obj = self.population[0]
+        for i in range(len(self.population)):
+                obj = self.population[i]
+                if obj.fitness &gt; best_obj.fitness:
+                        best_obj = obj
+                if obj.dead:
+                        obj.close()
+
+        self.best_score = best_obj.fitness
+        self.best_of_population = best_obj.clone()</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="nevolve.evolve" href="index.html">nevolve.evolve</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="nevolve.evolve.population.Population" href="#nevolve.evolve.population.Population">Population</a></code></h4>
+<ul class="">
+<li><code><a title="nevolve.evolve.population.Population.calculate_fitness" href="#nevolve.evolve.population.Population.calculate_fitness">calculate_fitness</a></code></li>
+<li><code><a title="nevolve.evolve.population.Population.calculate_fitness_sum" href="#nevolve.evolve.population.Population.calculate_fitness_sum">calculate_fitness_sum</a></code></li>
+<li><code><a title="nevolve.evolve.population.Population.close" href="#nevolve.evolve.population.Population.close">close</a></code></li>
+<li><code><a title="nevolve.evolve.population.Population.display_best" href="#nevolve.evolve.population.Population.display_best">display_best</a></code></li>
+<li><code><a title="nevolve.evolve.population.Population.evolve" href="#nevolve.evolve.population.Population.evolve">evolve</a></code></li>
+<li><code><a title="nevolve.evolve.population.Population.explore" href="#nevolve.evolve.population.Population.explore">explore</a></code></li>
+<li><code><a title="nevolve.evolve.population.Population.load_best_" href="#nevolve.evolve.population.Population.load_best_">load_best_</a></code></li>
+<li><code><a title="nevolve.evolve.population.Population.load_population" href="#nevolve.evolve.population.Population.load_population">load_population</a></code></li>
+<li><code><a title="nevolve.evolve.population.Population.mutate" href="#nevolve.evolve.population.Population.mutate">mutate</a></code></li>
+<li><code><a title="nevolve.evolve.population.Population.natural_selection" href="#nevolve.evolve.population.Population.natural_selection">natural_selection</a></code></li>
+<li><code><a title="nevolve.evolve.population.Population.save_best_" href="#nevolve.evolve.population.Population.save_best_">save_best_</a></code></li>
+<li><code><a title="nevolve.evolve.population.Population.save_population" href="#nevolve.evolve.population.Population.save_population">save_population</a></code></li>
+<li><code><a title="nevolve.evolve.population.Population.select_parent" href="#nevolve.evolve.population.Population.select_parent">select_parent</a></code></li>
+<li><code><a title="nevolve.evolve.population.Population.set_best_of_population" href="#nevolve.evolve.population.Population.set_best_of_population">set_best_of_population</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
